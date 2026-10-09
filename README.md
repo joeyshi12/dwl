@@ -1,3 +1,19 @@
+# dwl
+
+My build of [dwl](https://codeberg.org/dwl/dwl) 0.9, the Wayland port of dwm, for my Arch Linux
+system. It carries the `bar` and `movestack` patches, the tag colours from my dwm build, and my
+`config.h`. Colours come from `colors.h`, which `scripts/theme.sh` in
+[my dotfiles](https://github.com/joeyshi12/dotfiles) generates. Installation instructions are in the
+dotfiles repo.
+
+Status text is read from standard input:
+
+```sh
+~/.local/src/dwmstatus/dwmstatus -s | ~/.local/src/dwl/dwl
+```
+
+The upstream README follows.
+
 # dwl - dwm for Wayland
 
 Join us on our [Discord server]  
