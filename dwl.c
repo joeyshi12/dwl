@@ -91,7 +91,8 @@
 #define TEXTW(mon, text)        (drwl_font_getwidth(mon->drw, text) + mon->lrpad)
 
 /* enums */
-enum { SchemeNorm, SchemeSel, SchemeUrg }; /* color schemes */
+enum { SchemeNorm, SchemeSel, SchemeUrg, SchemeTagNorm,
+       SchemeTagSel, SchemeTagUrgent }; /* color schemes */
 enum { CurNormal, CurPressed, CurMove, CurResize }; /* cursor */
 enum { XDGShell, LayerShell, X11 }; /* client types */
 enum { LyrBg, LyrBottom, LyrTile, LyrFloat, LyrTop, LyrFS, LyrUnmanaged, LyrOverlay,
@@ -1679,7 +1680,7 @@ drawbar(Monitor *m)
 	int x, w, tw = 0;
 	int boxs = m->drw->font->height / 9;
 	int boxw = m->drw->font->height / 6 + 2;
-	uint32_t i, occ = 0, urg = 0;
+	uint32_t i, occ = 0, urg = 0, viewed;
 	Client *c;
 	Buffer *buf;
 
@@ -1706,12 +1707,17 @@ drawbar(Monitor *m)
 	c = focustop(m);
 	for (i = 0; i < LENGTH(tags); i++) {
 		w = TEXTW(m, tags[i]);
-		drwl_setscheme(m->drw, colors[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-		drwl_text(m->drw, x, 0, w, m->b.height, m->lrpad / 2, tags[i], urg & 1 << i);
-		if (occ & 1 << i)
-			drwl_rect(m->drw, x + boxs, boxs, boxw, boxw,
-				m == selmon && c && c->tags & 1 << i,
-				urg & 1 << i);
+		viewed = m->tagset[m->seltags] & 1 << i;
+		if (urg & 1 << i)
+			drwl_setscheme(m->drw, colors[SchemeTagUrgent]);
+		else if (viewed || occ & 1 << i)
+			drwl_setscheme(m->drw, colors[SchemeTagSel]);
+		else
+			drwl_setscheme(m->drw, colors[SchemeTagNorm]);
+		drwl_text(m->drw, x, 0, w, m->b.height, m->lrpad / 2, tags[i], 0);
+		/* Underline the viewed tags */
+		if (viewed)
+			drwl_rect(m->drw, x + 4, m->b.height - 2, w - 8, 2, 1, 0);
 		x += w;
 	}
 	w = TEXTW(m, m->ltsymbol);
@@ -3448,7 +3454,7 @@ updatebar(Monitor *m)
 
 	m->b.scale = m->wlr_output->scale;
 	m->lrpad = m->drw->font->height;
-	m->b.height = m->drw->font->height + 2;
+	m->b.height = m->drw->font->height + vbarpadding;
 	m->b.real_height = (int)((float)m->b.height / m->wlr_output->scale);
 }
 
