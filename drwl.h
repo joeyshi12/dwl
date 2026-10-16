@@ -240,6 +240,9 @@ drwl_text(Drwl *drwl,
 		last_cp = cp;
 
 		ty = y + (h - drwl->font->height) / 2 + drwl->font->ascent;
+		/* centre icons from the larger fallback font */
+		if ((cp >= 0xE000 && cp <= 0xF8FF) || cp >= 0xF0000)
+			ty = y + ((int)h - (int)glyph->height) / 2 + glyph->y;
 
 		if (render && !noellipsis && x_kern + glyph->advance.x + eg->advance.x > w &&
 		    *(p + 1) != '\0') {

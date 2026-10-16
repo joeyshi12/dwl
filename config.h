@@ -142,7 +142,6 @@ static const char *menucmd[] = { "rofi", "-show", "drun", "-show-icons", "-run-c
 static const char *screenshotcmd[] = { "/bin/sh", "-c", "~/.local/bin/screenshot", NULL };
 static const char *powermenucmd[] = { "/bin/sh", "-c", "~/.local/bin/powermenu", NULL };
 static const char *lockcmd[] = { "loginctl", "lock-session", NULL };
-static const char *quitcmd[] = { "uwsm", "stop", NULL };
 static const char *upvolcmd[]   = { "/bin/sh", "-c", "~/.dotfiles/scripts/volume_notify.sh up", NULL };
 static const char *downvolcmd[] = { "/bin/sh", "-c", "~/.dotfiles/scripts/volume_notify.sh down", NULL };
 static const char *mutevolcmd[] = { "/bin/sh", "-c", "~/.dotfiles/scripts/volume_notify.sh mute", NULL };
@@ -155,7 +154,6 @@ static const Key keys[] = {
 	{ 0,                XKB_KEY_XF86AudioLowerVolume, spawn,            {.v = downvolcmd} },
 	{ 0,                XKB_KEY_XF86AudioMute,        spawn,            {.v = mutevolcmd} },
 	{ 0,                XKB_KEY_XF86AudioRaiseVolume, spawn,            {.v = upvolcmd} },
-	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_x,           spawn,            {.v = powermenucmd} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_l,           spawn,            {.v = lockcmd} },
 	{ MODKEY,                    XKB_KEY_b,           togglebar,        {0} },
 	{ MODKEY,                    XKB_KEY_j,           focusstack,       {.i = +1} },
@@ -186,8 +184,7 @@ static const Key keys[] = {
 	TAGKEYS(                     XKB_KEY_3,           2),
 	TAGKEYS(                     XKB_KEY_4,           3),
 	TAGKEYS(                     XKB_KEY_5,           4),
-	/* Stop the session through uwsm so its units shut down in order */
-	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_q,           spawn,            {.v = quitcmd} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_q,           spawn,            {.v = powermenucmd} },
 
 	/* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
 	{ WLR_MODIFIER_CTRL|WLR_MODIFIER_ALT,XKB_KEY_BackSpace, quit, {0} },
