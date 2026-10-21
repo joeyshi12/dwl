@@ -1,8 +1,7 @@
 # dwl
 
-My build of [dwl](https://codeberg.org/dwl/dwl) 0.9 for my Arch Linux system, packaged as
-`dwl-wake` with a PKGBUILD so pacman tracks the install and keeps `wlroots0.20` and `scenefx`
-installed. The first commit is the upstream v0.9 tree with these changes applied:
+My build of [dwl](https://codeberg.org/dwl/dwl) 0.9 for my Arch Linux system. It needs the
+`wlroots0.20` and `scenefx` packages. The first commit is the upstream v0.9 tree with these changes applied:
 
 | Change | What it is |
 |---|---|
@@ -19,11 +18,12 @@ The bar is [wakebar](https://github.com/joeyshi12/wakebar), a separate program.
 ## Install
 
 ```sh
-makepkg -si
+make
+sudo make install
 ```
 
-This builds the working tree with Xwayland and installs to `/usr/bin/dwl`. Run it again after
-changing `config.h` or the theme.
+This builds with Xwayland and installs to `/usr/local/bin/dwl`. Run it again after changing
+`config.h` or the theme.
 
 ## Updating to a new dwl release
 
@@ -37,12 +37,12 @@ git diff v0.9 v0.10 | git apply -3
 
 Resolve any conflicts, then:
 
-1. Check which wlroots the release targets and update `depends` in the PKGBUILD. scenefx must
-   have a release for the same wlroots version.
+1. Check which wlroots the release targets in `config.mk`. scenefx must have a release for the
+   same wlroots version; set its version in `PKGS` in the `Makefile`.
 2. If the ipc protocol changed, check dwl-patches for an updated ipc patch and copy the new
    `protocols/dwl-ipc-unstable-v2.xml` into wakebar.
 3. Compare `config.h` with the new `config.def.h` and add any new settings.
-4. Update `pkgver` and reset `pkgrel` in the PKGBUILD, then `makepkg -si`.
+4. Run `make` and `sudo make install`.
 
 To see everything this build changes relative to upstream, run `git diff v0.9 HEAD`.
 

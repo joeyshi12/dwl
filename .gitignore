@@ -3,6 +3,3 @@ dwl
 *-protocol.c
 *-protocol.h
 .ccls-cache
-/src/
-/pkg/
-*.pkg.tar.zst
