@@ -2173,6 +2173,12 @@ mapnotify(struct wl_listener *listener, void *data)
 	} else {
 		applyrules(c);
 	}
+	/* A window that opens on a tag nobody is looking at (for example from a rule) is marked
+	 * urgent, so the bar highlights that tag until the window is focused */
+	if (c->mon && !VISIBLEON(c, c->mon)) {
+		c->isurgent = 1;
+		client_set_border_color(c, urgentcolor);
+	}
 	printstatus();
 
 unset_fullscreen:
