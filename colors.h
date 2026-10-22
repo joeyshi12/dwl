@@ -5,3 +5,4 @@
 #define COL_FG     0xe8f4f8ff
 #define COL_FG_DIM 0x6b8494ff
 #define COL_URGENT 0xf4d06fff
+#define COL_SHADOW 0x05090fff

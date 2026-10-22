@@ -15,6 +15,9 @@ static const float rootcolor[]             = COLOR(COL_BG);
 static const float bordercolor[]           = COLOR(COL_BG_ALT);
 static const float focuscolor[]            = COLOR(COL_ACCENT);
 static const float urgentcolor[]           = COLOR(COL_URGENT);
+/* A hard (unblurred) shadow offset down and right under floating windows; 0 turns it off */
+static const int shadowoffset              = 5;
+static const float shadowcolor[]           = {0.0196f * 0.85f, 0.0353f * 0.85f, 0.0588f * 0.85f, 0.85f}; /* COL_SHADOW at 85%, premultiplied */
 /* This conforms to the xdg-protocol. Set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.0f, 0.0f, 0.0f, 1.0f}; /* You can also use glsl colors */
 

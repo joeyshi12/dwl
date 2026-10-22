@@ -124,6 +124,7 @@ typedef struct {
 	Monitor *mon;
 	struct wlr_scene_tree *scene;
 	struct wlr_scene_rect *border[4]; /* top, bottom, left, right */
+	struct wlr_scene_shadow *shadow; /* hard shadow under the window, NULL when unmanaged */
 	struct wlr_scene_tree *scene_surface;
 	struct wl_list link;
 	struct wl_list flink;
@@ -2133,6 +2134,9 @@ mapnotify(struct wl_listener *listener, void *data)
 		goto unset_fullscreen;
 	}
 
+	/* Created first so it is drawn below the border and the window */
+	c->shadow = wlr_scene_shadow_create(c->scene, 0, 0, cornerradius, 1, shadowcolor);
+	wlr_scene_node_set_enabled(&c->shadow->node, 0);
 	for (i = 0; i < 4; i++) {
 		c->border[i] = wlr_scene_rect_create(c->scene, 0, 0,
 				c->isurgent ? urgentcolor : bordercolor);
@@ -2631,6 +2635,20 @@ resize(Client *c, struct wlr_box geo, int interact)
 	/* The border is one rounded rect behind the window with the window's area
 	 * cut out of it; border[1..3] stay empty */
 	wlr_scene_rect_set_size(c->border[0], c->geom.width, c->geom.height);
+	if (c->shadow) {
+		/* Floating windows only: tiled windows touch, so a shadow would fall on the
+		 * neighbouring window. Offset down and right, with the window's own area cut
+		 * out so it never shows through translucent windows. */
+		wlr_scene_node_set_enabled(&c->shadow->node, shadowoffset > 0 && !c->isfullscreen
+				&& (c->isfloating || !c->mon->lt[c->mon->sellt]->arrange));
+		wlr_scene_node_set_position(&c->shadow->node, shadowoffset, shadowoffset);
+		wlr_scene_shadow_set_size(c->shadow, c->geom.width, c->geom.height);
+		wlr_scene_shadow_set_corner_radius(c->shadow, cornerradius);
+		wlr_scene_shadow_set_clipped_region(c->shadow, (struct clipped_region){
+			.corners = corner_radii_all(cornerradius),
+			.area = { -shadowoffset, -shadowoffset, c->geom.width, c->geom.height },
+		});
+	}
 
 	client_set_size(c, c->geom.width - 2 * c->bw, c->geom.height - 2 * c->bw);
 	client_get_clip(c, &clip);
