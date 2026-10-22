@@ -21,7 +21,7 @@ static const float shadowcolor[]           = {0.0196f * 0.85f, 0.0353f * 0.85f, 
 /* This conforms to the xdg-protocol. Set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.0f, 0.0f, 0.0f, 1.0f}; /* You can also use glsl colors */
 
-/* tagging - TAGCOUNT must be no greater than 31. wakebar draws the tag icons. */
+/* tagging - TAGCOUNT must be no greater than 31. The wakeshell bar draws the tag icons. */
 #define TAGCOUNT (5)
 
 /* logging */
@@ -132,13 +132,13 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 /* Apps are started with uwsm app so each runs in its own systemd unit
  * instead of inside the compositor's unit. */
 static const char *termcmd[] = { "uwsm-app", "--", "ghostty", NULL };
-static const char *menucmd[] = { "rofi", "-show", "drun", "-show-icons", "-run-command", "uwsm-app -- {cmd}", NULL };
+static const char *menucmd[] = { "wakeshell", "msg", "launcher", "toggle", NULL };
 static const char *screenshotcmd[] = { "/bin/sh", "-c", "~/.local/bin/screenshot", NULL };
-static const char *powermenucmd[] = { "/bin/sh", "-c", "~/.local/bin/powermenu", NULL };
+static const char *powermenucmd[] = { "wakeshell", "msg", "powermenu", "toggle", NULL };
 static const char *lockcmd[] = { "loginctl", "lock-session", NULL };
-static const char *upvolcmd[]   = { "/bin/sh", "-c", "~/.dotfiles/scripts/volume_notify.sh up", NULL };
-static const char *downvolcmd[] = { "/bin/sh", "-c", "~/.dotfiles/scripts/volume_notify.sh down", NULL };
-static const char *mutevolcmd[] = { "/bin/sh", "-c", "~/.dotfiles/scripts/volume_notify.sh mute", NULL };
+static const char *upvolcmd[]   = { "wakeshell", "volume", "up", NULL };
+static const char *downvolcmd[] = { "wakeshell", "volume", "down", NULL };
+static const char *mutevolcmd[] = { "wakeshell", "volume", "mute", NULL };
 
 static const Key keys[] = {
 	/* modifier                  key                  function          argument */
