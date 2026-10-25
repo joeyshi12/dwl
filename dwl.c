@@ -2173,6 +2173,17 @@ mapnotify(struct wl_listener *listener, void *data)
 	} else {
 		applyrules(c);
 	}
+	/* Client-reported positions are surface offsets, which would leave new
+	 * floating windows in the monitor's top-left corner */
+	if (c->mon && c->isfloating && !c->isfullscreen) {
+		struct wlr_box *b = p && p->mon == c->mon ? &p->geom : &c->mon->w;
+		struct wlr_box *a = &c->mon->w;
+		c->geom.x = b->x + (b->width - c->geom.width) / 2;
+		c->geom.y = b->y + (b->height - c->geom.height) / 2;
+		c->geom.x = MAX(a->x, MIN(c->geom.x, a->x + a->width - c->geom.width));
+		c->geom.y = MAX(a->y, MIN(c->geom.y, a->y + a->height - c->geom.height));
+		resize(c, c->geom, 0);
+	}
 	/* A window that opens on a tag nobody is looking at (for example from a rule) is marked
 	 * urgent, so the bar highlights that tag until the window is focused */
 	if (c->mon && !VISIBLEON(c, c->mon)) {

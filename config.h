@@ -133,7 +133,7 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
  * instead of inside the compositor's unit. */
 static const char *termcmd[] = { "uwsm-app", "--", "ghostty", NULL };
 static const char *menucmd[] = { "wakeshell", "msg", "launcher", "toggle", NULL };
-static const char *screenshotcmd[] = { "/bin/sh", "-c", "~/.local/bin/screenshot", NULL };
+static const char *screenshotcmd[] = { "flameshot", "gui", NULL };
 static const char *powermenucmd[] = { "wakeshell", "msg", "powermenu", "toggle", NULL };
 static const char *lockcmd[] = { "loginctl", "lock-session", NULL };
 static const char *upvolcmd[]   = { "wakeshell", "volume", "up", NULL };
